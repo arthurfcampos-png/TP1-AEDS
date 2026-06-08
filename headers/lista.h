@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// --- ESTRUTURAS ---\\ 
+
 // Definindo tipo apontador
 typedef struct tipoNo* tipoApontador;
 
@@ -18,7 +20,7 @@ typedef struct tipoLista{
     tipoNo *primeiro, *ultimo;
 } tipoLista;
 
-// Cabeçalho de funções gerais
+// --- FUNÇÕES GERAIS --- \\ 
 
 void inicializaLista(tipoLista* lista);
 
