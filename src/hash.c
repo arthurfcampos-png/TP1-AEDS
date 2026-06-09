@@ -1,4 +1,4 @@
-#include "../headers/hash.h"
+#include "../include/hash.h"
 
 void inicializaHash (tipoHash* hash, int tamanho){
     // Define o tamanho da tabela na struct
@@ -54,24 +54,24 @@ void insereHash (tipoHash* hash, char* palavra, int idDoc){
     inicializaLista (&(novoNO->ocorrencias));
     insereLista (idDoc, &(novoNO->ocorrencias));
 
-    
+
     novoNO->prox = hash->tabela[indice]; // novoNo entra e se liga como primeiro da lista encadeada
     hash->tabela[indice] = novoNO; // Tabela reconhece o novoNo como o primeiro
 }
 
-// Função auxiliar para o qsort comparar as strings em ordem alfabética 
+// Função auxiliar para o qsort comparar as strings em ordem alfabética
 int comparaNos(const void* a, const void* b) {
     // Convertendo os ponteiros genéricos do qsort para os nossos nós
     tipoNoHash* noA = *(tipoNoHash**)a;
     tipoNoHash* noB = *(tipoNoHash**)b;
-    
+
     // O strcmp já faz a comparação alfabética perfeita para nós!
     return strcmp(noA->palavra, noB->palavra);
 }
 
 // Imprime o índice invertido em ordem alfabética
 void imprimeHash(tipoHash* hash) {
-    
+
     // Contar o total de palavras armazenadas
     int totalPalavras = 0;
     for (int i = 0; i < hash->tamanho; i++) {
@@ -89,7 +89,7 @@ void imprimeHash(tipoHash* hash) {
 
     // Alocar um vetor dinâmico de ponteiros temporário
     tipoNoHash** vetorTemp = (tipoNoHash**) malloc(totalPalavras * sizeof(tipoNoHash*));
-    
+
     // Preencher o vetor com os endereços de todos os nós
     int pos = 0;
     for (int i = 0; i < hash->tamanho; i++) {
@@ -108,9 +108,9 @@ void imprimeHash(tipoHash* hash) {
     for (int i = 0; i < totalPalavras; i++) {
         // Imprime a palavra
         printf("%s ", vetorTemp[i]->palavra);
-        
-        // Imprime a lista de ocorrências 
-        imprimeLista(&(vetorTemp[i]->ocorrencias)); 
+
+        // Imprime a lista de ocorrências
+        imprimeLista(&(vetorTemp[i]->ocorrencias));
     }
 
     // Liberar a memória do vetor temporário

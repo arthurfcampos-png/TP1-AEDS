@@ -1,11 +1,11 @@
 #ifndef HASH_H
 #define HASH_H
 
-#include "../headers/lista.h"
+#include "../include/lista.h"
 #include <string.h>
 #define MAX_PALAVRA 46
 
-// --- ESTRUTURAS -- \\ 
+// --- ESTRUTURAS -- \\
 
 typedef struct tipoNoHash {
     char palavra [MAX_PALAVRA];
@@ -18,7 +18,7 @@ typedef struct tipoHash {
     int tamanho;
 } tipoHash;
 
-// --- FUNÇÕES GERAIS --- \\ 
+// --- FUNÇÕES GERAIS --- \\
 
 // Inicializa a tabela Hash
 void inicializaHash (tipoHash* hash, int tamanhoTabela);
@@ -37,6 +37,3 @@ void imprimeHash (tipoHash* hash);
 
 
 #endif
-
-
-
