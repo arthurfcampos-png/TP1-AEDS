@@ -3,7 +3,8 @@
 
 #include "../headers/lista.h"
 #include <string.h>
-#define MAX_PALAVRA 46
+#define MAX_PALAVRA 70
+#define TAM_ALFABETO 256 // Para cobrir toda a tabela ASCII (Padrão Ziviani)
 
 // --- ESTRUTURAS -- \\ 
 
@@ -16,6 +17,7 @@ typedef struct tipoNoHash {
 typedef struct tipoHash {
     tipoNoHash** tabela;
     int tamanho;
+    unsigned int pesos[MAX_PALAVRA][TAM_ALFABETO];
 } tipoHash;
 
 // --- FUNÇÕES GERAIS --- \\ 
@@ -24,7 +26,7 @@ typedef struct tipoHash {
 void inicializaHash (tipoHash* hash, int tamanhoTabela);
 
 // Calcula o índice do vetor que a palavra a ser inserida ocupará
-int calculaHash (char* palavra, int tamanhoTabela);
+int calculaHash (tipoHash* hash, char* palavra);
 
 // Insere a palavra na tabela (IdDoc também)
 void insereHash (tipoHash* hash, char* palavra, int idDoc);

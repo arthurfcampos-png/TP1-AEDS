@@ -1,33 +1,41 @@
 #include "../headers/hash.h"
 
-void inicializaHash (tipoHash* hash, int tamanho){
-    // Define o tamanho da tabela na struct
+void inicializaHash(tipoHash* hash, int tamanho) {
     hash->tamanho = tamanho;
-
-    // Alocando dinamicamente memoria para a tabela
-    hash->tabela = (tipoNoHash**) malloc (tamanho * sizeof(tipoNoHash*));
-
+    
+    hash->tabela = (tipoNoHash**) malloc(tamanho * sizeof(tipoNoHash*));
     if (hash->tabela == NULL) {
-        printf ("Erro: Falha ao alocar memoria para a tabela hash");
-        exit(1); // Sem a tabela, todo o resto do código é encerrado
+        printf("Erro: Falha ao alocar memoria para a Tabela Hash.\n");
+        exit(1);
     }
-
-    // Laço para definir todos os slots da tabela como null
+    
     for (int i = 0; i < tamanho; i++) {
         hash->tabela[i] = NULL;
     }
+
+    struct timeval semente;
+    // Utiliza o tempo exato em microssegundos para gerar uma semente muito aleatória
+    gettimeofday(&semente, NULL); 
+    srand((int)(semente.tv_sec + 1000000 * semente.tv_usec));
+
+    // Preenche a matriz de pesos
+    for (int i = 0; i < MAX_PALAVRA; i++) {
+        for (int j = 0; j < TAM_ALFABETO; j++) {
+            hash->pesos[i][j] = 1 + (int)(10000.0 * rand() / (RAND_MAX + 1.0));
+        }
+    }
 }
 
-int calculaHash (char* palavra, int tamanhoTabela) {
-    unsigned long hash = 0;
-    int c;
-
-    // Laço percorre a letra da palavra até encontrar o final '\0'
-    while ((c = *palavra++)) {
-        hash = (hash * 31) + c; // 31 é o numero primo escolhido
+int calculaHash(tipoHash* hash, char* palavra) {
+    unsigned int soma = 0; 
+    int comp = strlen(palavra);
+    
+    for (int i = 0; i < comp; i++) {
+        // Pega o peso sorteado para a posição 'i' e a letra 'palavra[i]'
+        soma += hash->pesos[i][(unsigned int)palavra[i]];
     }
-
-    return hash % tamanhoTabela;
+    
+    return (soma % hash->tamanho);
 }
 
 void insereHash (tipoHash* hash, char* palavra, int idDoc){
