@@ -62,3 +62,18 @@ Para juntar esse módulo com o resto do trabalho, é só fazer o seguinte:
 **1. Dar o include lá no topo da main:**
 ```c
 #include "leitura_entrada.h"
+
+```C
+int main() {
+    // ... código do menu de vocês ...
+    
+    // Na hora que o usuário escolher a opção A (receber o arquivo de entrada):
+    printf("Iniciando a leitura dos arquivos...\n");
+    
+    // Só passar os nomes dos arquivos principais:
+    lerEntradaPrincipal("entrada.txt", "Stopwords.txt");
+    
+    // ... resto do código ...
+    return 0;
+}
+```
