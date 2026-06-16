@@ -14,8 +14,3 @@ fabula12.txt
 fabula13.txt
 fabula14.txt
 fabula15.txt
-fabula16.txt
-fabula17.txt
-fabula18.txt
-fabula19.txt
-fabula20.txt

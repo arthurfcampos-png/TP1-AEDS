@@ -41,7 +41,7 @@ int calculaHash(tipoHash* hash, char* palavra) {
 void insereHash (tipoHash* hash, char* palavra, int idDoc){
 
     // Calcula o índice matemático
-    int indice = calculaHash(palavra, hash->tamanho);
+    int indice = calculaHash(hash, palavra);
 
     // Verifica a lista de colisões nesse índice
     tipoNoHash* atual = hash->tabela[indice];

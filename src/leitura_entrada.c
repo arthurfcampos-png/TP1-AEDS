@@ -54,7 +54,11 @@ void carregarStopWords(const char* nomeArquivo, char stopWords[][50], int* numSt
 
 // Abre a fabula especifica, le palavra por palavra e joga pros TADs
 void processarFabula(const char* nomeFabula, int idDoc, char stopWords[][50], int numStopWords, tipoHash* hash) {
-    FILE* f = fopen(nomeFabula, "r");
+    char caminho_completo[100];
+
+    snprintf(caminho_completo, sizeof(caminho_completo), "entradas/%s", nomeFabula);
+
+    FILE* f = fopen(caminho_completo, "r");
     if (f == NULL) {
         printf("Deu ruim: Nao achei a fabula %s!\n", nomeFabula);
         return;

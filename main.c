@@ -10,11 +10,14 @@ int main(){
     tipoHash hash;
     inicializaHash(&hash, TAM_HASH);
 
-    char arquivo[50];
+    //char arquivo[50];
 
-    printf("iniciando");
+    printf("iniciando\n");
 
-    scanf("%s", arquivo);
+    //scanf("%s", arquivo);
 
-    lerEntradaPrincipal(arquivo, "stopwords.txt", &hash);
+    lerEntradaPrincipal("./entradas/entrada.txt", "stopwords.txt", &hash);
+
+    imprimeHash(&hash);
+    return 0;
 }
