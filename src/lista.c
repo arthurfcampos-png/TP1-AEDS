@@ -1,4 +1,4 @@
-#include "../include/lista.h"
+#include "../headers/lista.h"
 
 // --- FUNÇÕES GERAIS ---
 

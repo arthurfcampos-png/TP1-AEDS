@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "../include/leitura_entrada.h"
+#include "../headers/leitura_entrada.h"
 
 
 // Funcao pra tirar pontuacao e botar tudo minusculo, porque o TF-IDF é sensivel e a professora pediu

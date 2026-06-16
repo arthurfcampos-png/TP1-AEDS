@@ -1,7 +1,7 @@
 #ifndef HASH_H
 #define HASH_H
 
-#include "../include/lista.h"
+#include "../headers/lista.h"
 #include <string.h>
 #include <sys/time.h>
 #define MAX_PALAVRA 70

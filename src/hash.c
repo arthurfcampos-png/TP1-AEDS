@@ -1,4 +1,4 @@
-#include "../include/hash.h"
+#include "../headers/hash.h"
 
 void inicializaHash(tipoHash* hash, int tamanho) {
     hash->tamanho = tamanho;

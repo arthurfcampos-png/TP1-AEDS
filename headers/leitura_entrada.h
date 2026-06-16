@@ -1,7 +1,7 @@
 #ifndef LEITURA_ENTRADA_H
 #define LEITURA_ENTRADA_H
 
-#include "../include/hash.h"
+#include "../headers/hash.h"
 #include <stdio.h>
 
 // Struct pra guardar o nome do arquivo e o ID dele em memoria, senao a gente se perde na hora de listar

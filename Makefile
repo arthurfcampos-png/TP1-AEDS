@@ -1,7 +1,7 @@
 #comandos recorrentemente executados
 EXEC = ./tp
 CC = gcc
-INCLUDE = -I./include
+INCLUDE = -I./headers
 
 #e importante declarar essas variaveis com os nomes das pastas para que se mudarmos o nome seja mais facil muda-las no arquivo
 SRC = ./src
@@ -28,9 +28,6 @@ all:
 	$(CC) -c $(SRC)/leitura_entrada.c $(INCLUDE) -o $(OBJ)/leitura_entrada.o -g
 	$(CC) -c $(SRC)/lista.c $(INCLUDE) -o $(OBJ)/lista.o -g
 	$(CC) -c $(SRC)/patricia.c $(INCLUDE) -o $(OBJ)/patricia.o -g
-	$(CC) -c $(SRC)/tfidf_hash.c $(INCLUDE) -o $(OBJ)/tfidf_hash.o -g
-	$(CC) -c $(SRC)/tfidf_patricia.c $(INCLUDE) -o $(OBJ)/tfidf_patricia.o -g
-	$(CC) -c $(SRC)/utils.c $(INCLUDE) -o $(OBJ)/utils.o -g
 
 #faco a compilacao do main tranformando-o em um executavel
 	$(CC) $(TP)/main.c $(OBJ)/*.o $(INCLUDE) -o $(EXEC) -g
