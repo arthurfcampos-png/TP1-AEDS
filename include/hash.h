@@ -1,12 +1,14 @@
 #ifndef HASH_H
 #define HASH_H
 
-#include "../headers/lista.h"
+#include "../include/lista.h"
 #include <string.h>
+#include <sys/time.h>
 #define MAX_PALAVRA 70
 #define TAM_ALFABETO 256 // Para cobrir toda a tabela ASCII (Padrão Ziviani)
+#define TAM_HASH 10007 //numero total de palavras / tamanho da lista encadeada
 
-// --- ESTRUTURAS -- \\ 
+// --- ESTRUTURAS -- \\
 
 typedef struct tipoNoHash {
     char palavra [MAX_PALAVRA];
@@ -20,7 +22,7 @@ typedef struct tipoHash {
     unsigned int pesos[MAX_PALAVRA][TAM_ALFABETO];
 } tipoHash;
 
-// --- FUNÇÕES GERAIS --- \\ 
+// --- FUNÇÕES GERAIS --- \\
 
 // Inicializa a tabela Hash
 void inicializaHash (tipoHash* hash, int tamanhoTabela);
@@ -39,6 +41,3 @@ void imprimeHash (tipoHash* hash);
 
 
 #endif
-
-
-
