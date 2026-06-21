@@ -1,7 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
 #include "../headers/leitura_entrada.h"
 
 
@@ -52,7 +48,7 @@ void carregarStopWords(const char* nomeArquivo, char stopWords[][MAX_PALAVRA], i
 }
 
 //abre a fabula especifica, le palavra por palavra e joga pros TADs
-int processarFabula(const char* nomeFabula, int idDoc, char stopWords[][MAX_PALAVRA], int numStopWords, tipoHash* hash) {
+int processarFabula(const char* nomeFabula, int idDoc, char stopWords[][MAX_PALAVRA], int numStopWords, tipoHash* hash, tipoNoPatricia** patricia) {
     char caminho_completo[100];
     snprintf(caminho_completo, sizeof(caminho_completo), "entradas/%s", nomeFabula);
 
@@ -72,8 +68,7 @@ int processarFabula(const char* nomeFabula, int idDoc, char stopWords[][MAX_PALA
 
             nTermos += insereHash(hash, palavra, idDoc);
 
-            // Quando a Patricia estiver pronta, vai entrar algo como:
-            // inserePatricia(&arvorePatricia, palavra, idDoc);
+            inserePatricia(patricia, palavra, idDoc);
         }
     }
     fclose(f);
@@ -82,7 +77,7 @@ int processarFabula(const char* nomeFabula, int idDoc, char stopWords[][MAX_PALA
 }
 
 //função pra ler a entrada principa que retorna um ponteiro pro array de documentos, pra podermos calcular o tfidf corretamente
-Documento* lerEntradaPrincipal(const char* arquivoEntradaPrincipal, const char* arquivoStopWords, tipoHash* hash, int* nDocs){
+Documento* lerEntradaPrincipal(const char* arquivoEntradaPrincipal, const char* arquivoStopWords, tipoHash* hash, tipoNoPatricia** patricia, int* nDocs){
     char stopWords[500][MAX_PALAVRA]; //cabe 500 palavras com o tamanho de MAX_PALAVRA
     int numStopWords = 0;
 
@@ -116,7 +111,7 @@ Documento* lerEntradaPrincipal(const char* arquivoEntradaPrincipal, const char* 
     for (int i = 0; i < n; i++) {
         fscanf(f, "%s", docs[i].nomeArquivo);        
         docs[i].idDoc = i + 1;
-        docs[i].nTermos = processarFabula(docs[i].nomeArquivo, docs[i].idDoc, stopWords, numStopWords, hash);
+        docs[i].nTermos = processarFabula(docs[i].nomeArquivo, docs[i].idDoc, stopWords, numStopWords, hash, patricia);
     }
 
     *nDocs = n;

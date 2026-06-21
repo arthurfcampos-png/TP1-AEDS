@@ -2,9 +2,6 @@
 #define PATRICIA_H
 
 #include "../headers/lista.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <sys/stat.h>
 
 typedef struct tipoNoPatricia {

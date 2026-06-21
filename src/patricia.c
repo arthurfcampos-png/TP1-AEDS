@@ -1,13 +1,14 @@
 #include "../headers/patricia.h"
 
+
 //variaveis para analise de desempenho
 long long patricia_comparacoes_insercao = 0;
 long long patricia_comparacoes_busca = 0;
 size_t patricia_memoria_bytes = 0;
 
 
-//retorna o caractere da palavra em uma posicao especifica. usamos o inline para melhorar um pouco a performance
-inline char char_em(const char* str, int pos) {
+//retorna o caractere da palavra em uma posicao especifica
+char char_em(const char* str, int pos) {
     int i = 0;
     while (i < pos && str[i] != '\0') {
         i++;
@@ -132,7 +133,7 @@ int inserePatricia(tipoNoPatricia** raiz_ptr, char* palavra, int idDoc) {
     tipoNoPatricia* cur = raiz;
 
     //encontra o ponto de inserção do novo no interno na hierarquia
-    while (cur->pos >= 0 && cur->pos < dif) {
+    while (cur->pos >= 0 && cur->pos <= dif) {
         patricia_comparacoes_insercao++;
         if (char_em(palavra, cur->pos) < cur->ch) {
             link = &(cur->esq);

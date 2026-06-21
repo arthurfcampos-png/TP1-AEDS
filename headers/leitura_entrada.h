@@ -2,7 +2,9 @@
 #define LEITURA_ENTRADA_H
 
 #include "../headers/hash.h"
-#include <stdio.h>
+#include "../headers/patricia.h"
+#include <ctype.h>
+
 
 // Struct pra guardar o nome do arquivo e o ID dele em memoria
 typedef struct {
@@ -17,8 +19,8 @@ int ehStopWord(char* palavra, char stopWords[][MAX_PALAVRA], int numStopWords);
 
 void carregarStopWords(const char* nomeArquivo, char stopWords[][MAX_PALAVRA], int* numStopWords);
 
-int processarFabula(const char* nomeFabula, int idDoc, char stopWords[][MAX_PALAVRA], int numStopWords, tipoHash* hash);
+int processarFabula(const char* nomeFabula, int idDoc, char stopWords[][MAX_PALAVRA], int numStopWords, tipoHash* hash, tipoNoPatricia** patricia);
 
-Documento* lerEntradaPrincipal(const char* arquivoEntradaPrincipal, const char* arquivoStopWords, tipoHash* hash, int* nDocs);
+Documento* lerEntradaPrincipal(const char* arquivoEntradaPrincipal, const char* arquivoStopWords, tipoHash* hash, tipoNoPatricia** patricia, int* nDocs);
 
 #endif

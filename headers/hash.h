@@ -2,8 +2,7 @@
 #define HASH_H
 
 #include "../headers/lista.h"
-#include <string.h>
-#include <sys/time.h>
+
 #define MAX_PALAVRA 80
 #define TAM_ALFABETO 256
 #define TAM_HASH 2003
