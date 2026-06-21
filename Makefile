@@ -1,41 +1,8 @@
-#comandos recorrentemente executados
-EXEC = ./tp
-CC = gcc
-INCLUDE = -I./headers
-
-#e importante declarar essas variaveis com os nomes das pastas para que se mudarmos o nome seja mais facil muda-las no arquivo
-SRC = ./src
-OBJ = ./obj
-TP = ./
-
-#condicional com os comandos respectivos do sistema operacional
-ifeq ($(OS),Windows_NT)
-    RM = del /Q
-    EXEC := $(EXEC).exe
-	OBJCLEAN = .\obj\
-	BINCLEAN = .\bin\*.exe
-else
-	EXEC = ./bin/tp
-    RM = rm -f
-	OBJCLEAN = ./obj/*
-	BINCLEAN = ./bin/*
-endif
-
-#target de compilacao (comando pra compilar no windows -> mingw32-make || comando pra compilar no linux -> make)
 all:
-#faco a compilacao dos arquivos do src (.c) e transformo-os em objetos
-	$(CC) -c $(SRC)/hash.c $(INCLUDE) -o $(OBJ)/hash.o -g
-	$(CC) -c $(SRC)/leitura_entrada.c $(INCLUDE) -o $(OBJ)/leitura_entrada.o -g
-	$(CC) -c $(SRC)/lista.c $(INCLUDE) -o $(OBJ)/lista.o -g
-	$(CC) -c $(SRC)/patricia.c $(INCLUDE) -o $(OBJ)/patricia.o -g
+	gcc ./src/*.c main.c -I./headers -g -Wall -o tp
 
-#faco a compilacao do main tranformando-o em um executavel
-	$(CC) $(TP)/main.c $(OBJ)/*.o $(INCLUDE) -o $(EXEC) -g
+run: all
+	./tp
 
-#target de execucao (comando pra compilar no windows -> mingw32-make executar || comando pra compilar no linux -> make executar)
-executar:
-	$(EXEC)
-
-#target que limpeza (comando pra compilar no windows -> mingw32-make limpar || comando pra compilar no linux -> make limpar)
-limpar:
-	$(RM) $(OBJCLEAN) $(BINCLEAN)
+clean:
+	rm -f tp tp.exe

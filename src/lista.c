@@ -1,6 +1,5 @@
 #include "../headers/lista.h"
 
-// --- FUNÇÕES GERAIS ---
 
 // Função para inicializar a lista encadeada
 void inicializaLista(tipoLista* lista){
@@ -10,32 +9,40 @@ void inicializaLista(tipoLista* lista){
 }
 
 // Função para inserção na lista encadeada
-void insereLista(int idDoc , tipoLista* lista){
-    tipoApontador aux = lista->primeiro->prox; // Ponteiro auxiliar para percorrer a lista
+int insereLista(int idDoc , tipoLista* lista){
+    tipoNo* aux = lista->primeiro; //ponteiro auxiliar para percorrer a lista
 
-    while (aux != NULL){  // Loop para percursão
-        if (aux->idDoc == idDoc){  // Verifica se o ID do documento já consta na lista
-            aux->qtde++; // Caso consta na lista encadeada, apenas aumenta em 1 a ocorrência
-            return;
+    while ((aux->prox != NULL) && (aux->prox->idDoc <= idDoc)){
+        if (aux->prox->idDoc == idDoc){  //verifica se esse idDoc já está na lista
+            aux->prox->qtde++; //se já estiver na lista apenas incrementa a qtde
+            return 0;
         }
         aux = aux->prox;
     }
 
-    // Caso o documento da ocorrência não for encontrado na lista, cria um nó.
-    lista->ultimo->prox = (tipoApontador) malloc(sizeof(tipoNo));
-    lista->ultimo = lista->ultimo->prox;
+    //criamos o novoNo alocando memória para ele e depois definimos o idDoc e qtde
+    tipoNo* novoNo = (tipoNo*) malloc(sizeof(tipoNo));
+    novoNo->idDoc = idDoc;
+    novoNo->qtde = 1;
 
-    lista->ultimo->idDoc = idDoc;
-    lista->ultimo->qtde = 1;
-    lista->ultimo->prox = NULL;
+    //fazemos o novoNo se ligar ao nó que estava logo após o aux->prox e depois religamos os ponteiros
+    novoNo->prox = aux->prox;
+    aux->prox = novoNo;
+
+    //se o novoNo->prox for NULL, inserimos exatamente no final da lista. Sendo assim, atualizamos o lista->ultimo
+    if(novoNo->prox == NULL){
+        lista->ultimo = novoNo;
+    }
+
+    return 1;
 }
 
 // Função para imprimir a lista
 void imprimeLista(tipoLista* lista){
-    tipoApontador aux;
+    tipoNo* aux;
     aux = lista->primeiro->prox;
     while (aux != NULL){
-        // Formato exigido no trabalho: <qtde, idDoc>
+        //<qtde, idDoc>
         printf("<%d, %d> ", aux->qtde, aux->idDoc);
         aux = aux->prox;
     }
@@ -43,37 +50,37 @@ void imprimeLista(tipoLista* lista){
 }
 
 
-// --- IMPLEMENTAÇÃO DOS GETTERS ---
+//Gets
 
-int getQtde(tipoApontador no) {
+int getQtde(tipoNo* no) {
     if (no != NULL) {
         return no->qtde;
     }
     return 0;
 }
 
-int getIdDoc(tipoApontador no) {
+int getIdDoc(tipoNo* no) {
     if (no != NULL) {
         return no->idDoc;
     }
-    return -1; // Retorno de segurança para indicar erro/vazio
+    return -1;
 }
 
-tipoApontador getProx(tipoApontador no) {
+tipoNo* getProx(tipoNo* no) {
     if (no != NULL) {
         return no->prox;
     }
     return NULL;
 }
 
-tipoApontador getPrimeiro(tipoLista* lista) {
+tipoNo* getPrimeiro(tipoLista* lista) {
     if (lista != NULL) {
         return lista->primeiro;
     }
     return NULL;
 }
 
-tipoApontador getUltimo(tipoLista* lista) {
+tipoNo* getUltimo(tipoLista* lista) {
     if (lista != NULL) {
         return lista->ultimo;
     }
@@ -81,21 +88,21 @@ tipoApontador getUltimo(tipoLista* lista) {
 }
 
 
-// --- IMPLEMENTAÇÃO DOS SETTERS ---
+// Sets
 
-void setQtde(tipoApontador no, int qtde) {
+void setQtde(tipoNo* no, int qtde) {
     if (no != NULL) {
         no->qtde = qtde;
     }
 }
 
-void setIdDoc(tipoApontador no, int idDoc) {
+void setIdDoc(tipoNo* no, int idDoc) {
     if (no != NULL) {
         no->idDoc = idDoc;
     }
 }
 
-void setProx(tipoApontador no, tipoApontador prox) {
+void setProx(tipoNo* no, tipoNo* prox) {
     if (no != NULL) {
         no->prox = prox;
     }

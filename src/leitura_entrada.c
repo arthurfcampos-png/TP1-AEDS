@@ -5,34 +5,34 @@
 #include "../headers/leitura_entrada.h"
 
 
-// Funcao pra tirar pontuacao e botar tudo minusculo, porque o TF-IDF é sensivel e a professora pediu
+//funcao pra colocar todos os caracteres minusculos
 void limparPalavra(char* palavra) {
     int i = 0, j = 0;
-    char limpa[100];
+    char limpa[MAX_PALAVRA];
 
     while (palavra[i] != '\0') {
-        if (isalpha(palavra[i])) { // Se for letra, passa pra minuscula
+        if (isalpha(palavra[i])) {
             limpa[j] = tolower(palavra[i]);
             j++;
         }
         i++;
     }
-    limpa[j] = '\0'; // Finaliza a string pro C nao imprimir lixo de memoria na tela
+    limpa[j] = '\0';
     strcpy(palavra, limpa);
 }
 
-// Funcao que verifica se a palavra ta na lista de stop words
-int ehStopWord(char* palavra, char stopWords[][50], int numStopWords) {
+//funcao que verifica se a palavra esta na lista de stopwords
+int ehStopWord(char* palavra, char stopWords[][MAX_PALAVRA], int numStopWords) {
     for(int i = 0; i < numStopWords; i++) {
         if(strcmp(palavra, stopWords[i]) == 0) {
-            return 1; // Achei a maldita, ignora ela
+            return 1;
         }
     }
-    return 0; // Palavra limpa, pode seguir pro indice
+    return 0; //palavra limpa
 }
 
-// Funcao pra carregar as stop words que a professora mandou no txt
-void carregarStopWords(const char* nomeArquivo, char stopWords[][50], int* numStopWords) {
+//funcao para carregar as stopwords
+void carregarStopWords(const char* nomeArquivo, char stopWords[][MAX_PALAVRA], int* numStopWords) {
     FILE* f = fopen(nomeArquivo, "r");
     if (f == NULL) {
         printf("Arquivo %s não existe\n", nomeArquivo);
@@ -41,89 +41,88 @@ void carregarStopWords(const char* nomeArquivo, char stopWords[][50], int* numSt
     }
 
     *numStopWords = 0;
-    // O fscanf ja ignora os 'enters' do Stopwords.txt automaticamente
+
     while (fscanf(f, "%s", stopWords[*numStopWords]) != EOF && *numStopWords < 500) {
         limparPalavra(stopWords[*numStopWords]);
         (*numStopWords)++;
     }
     fclose(f);
 
-    // Print de seguranca pra gente saber que o arquivo leu certo
     printf(" %d Stopwords carregadas com sucesso!\n", *numStopWords);
 }
 
-// Abre a fabula especifica, le palavra por palavra e joga pros TADs
-void processarFabula(const char* nomeFabula, int idDoc, char stopWords[][50], int numStopWords, tipoHash* hash) {
+//abre a fabula especifica, le palavra por palavra e joga pros TADs
+int processarFabula(const char* nomeFabula, int idDoc, char stopWords[][MAX_PALAVRA], int numStopWords, tipoHash* hash) {
     char caminho_completo[100];
-
     snprintf(caminho_completo, sizeof(caminho_completo), "entradas/%s", nomeFabula);
 
     FILE* f = fopen(caminho_completo, "r");
     if (f == NULL) {
-        printf("Deu ruim: Nao achei a fabula %s!\n", nomeFabula);
-        return;
+        printf("erro: fabula %s nao encontrada\n", nomeFabula);
+        return 0;
     }
 
-    char palavra[100];
+    char palavra[MAX_PALAVRA];
+    int nTermos = 0;
 
     while (fscanf(f, "%s", palavra) != EOF) {
         limparPalavra(palavra);
 
         if (strlen(palavra) > 0 && !ehStopWord(palavra, stopWords, numStopWords)) {
 
-            // Inserindo na Hash!
-            // A gente passa o endereco da hash, a palavra limpa e o ID do documento
-            insereHash(hash, palavra, idDoc);
+            nTermos += insereHash(hash, palavra, idDoc);
 
             // Quando a Patricia estiver pronta, vai entrar algo como:
             // inserePatricia(&arvorePatricia, palavra, idDoc);
         }
     }
     fclose(f);
+
+    return nTermos;
 }
 
-// Funcao chefe que faz o meio de campo. A main (do menu) so precisa chamar essa aqui.
-void lerEntradaPrincipal(const char* arquivoEntradaPrincipal, const char* arquivoStopWords, tipoHash* hash){
-    char stopWords[500][50]; // Cabem ate 500 palavras de ate 50 letras
+//função pra ler a entrada principa que retorna um ponteiro pro array de documentos, pra podermos calcular o tfidf corretamente
+Documento* lerEntradaPrincipal(const char* arquivoEntradaPrincipal, const char* arquivoStopWords, tipoHash* hash, int* nDocs){
+    char stopWords[500][MAX_PALAVRA]; //cabe 500 palavras com o tamanho de MAX_PALAVRA
     int numStopWords = 0;
 
-    // 1. Carrega as stop words primeiro
     carregarStopWords(arquivoStopWords, stopWords, &numStopWords);
 
-    // 2. Abre o entrada.txt
+    //abre o arquivo de entrada
     FILE* f = fopen(arquivoEntradaPrincipal, "r");
     if (f == NULL) {
-        printf("Erro fatal: Arquivo %s nao encontrado.\n", arquivoEntradaPrincipal);
-        return;
+        printf("erro: arquivo %s nao encontrado.\n", arquivoEntradaPrincipal);
+        return NULL;
     }
 
     int n;
-    if(fscanf(f, "%d", &n) != 1) { // Puxa o numero total de fabulas da primeira linha
-        printf("Erro: Arquivo vazio ou sem o N na primeira linha.\n");
+    if(fscanf(f, "%d", &n) != 1) { //pega o numero total de fabulas da primeira linha
+        printf("erro: arquivo vazio ou sem o N na primeira linha.\n");
         fclose(f);
-        return;
+        return NULL;
     }
 
-    // Alocacao dinamica pra guardar o idDoc e o nome em memoria como manda o PDF
+    //alocacao dinamica pra guardar o idDoc e o nome em memoria
     Documento* docs = (Documento*) malloc(n * sizeof(Documento));
     if (docs == NULL) {
-        printf("Faltou memoria, malloc falhou.\n");
+        printf("erro: falta de memoria. malloc falhou.\n");
         fclose(f);
-        return;
+        return NULL;
     }
 
     printf("[OK] Lendo %d fabulas...\n", n);
 
-    // Le o nome de cada arquivo, cria o ID e ja manda processar
+    //lê o nome de cada arquivo, cria o idDoc, processa e atualiza o nTermos no docs 
     for (int i = 0; i < n; i++) {
-        fscanf(f, "%s", docs[i].nomeArquivo);
+        fscanf(f, "%s", docs[i].nomeArquivo);        
         docs[i].idDoc = i + 1;
-
-        processarFabula(docs[i].nomeArquivo, docs[i].idDoc, stopWords, numStopWords, hash);
+        docs[i].nTermos = processarFabula(docs[i].nomeArquivo, docs[i].idDoc, stopWords, numStopWords, hash);
     }
 
-    // Libera a memoria pro Valgrind nao chorar
-    free(docs);
+    *nDocs = n;
+   
     fclose(f);
     printf("[OK] Leitura das fabulas finalizada com sucesso!\n");
+
+    return docs;
 }

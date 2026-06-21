@@ -14,16 +14,13 @@ void inicializaHash(tipoHash* hash, int tamanho) {
     }
 
     struct timeval semente;
-    // Utiliza o tempo exato em microssegundos para gerar uma semente muito aleatória
     gettimeofday(&semente, NULL); 
     srand((int)(semente.tv_sec + 1000000 * semente.tv_usec));
 
-    // Preenche a matriz de pesos
+    //preenche o vetor de pesos
     for (int i = 0; i < MAX_PALAVRA; i++) {
-        for (int j = 0; j < TAM_ALFABETO; j++) {
-            hash->pesos[i][j] = 1 + (int)(10000.0 * rand() / (RAND_MAX + 1.0));
+            hash->pesos[i] = 1 + (int)(10000.0 * rand() / (RAND_MAX + 1.0));
         }
-    }
 }
 
 int calculaHash(tipoHash* hash, char* palavra) {
@@ -31,40 +28,38 @@ int calculaHash(tipoHash* hash, char* palavra) {
     int comp = strlen(palavra);
     
     for (int i = 0; i < comp; i++) {
-        // Pega o peso sorteado para a posição 'i' e a letra 'palavra[i]'
-        soma += hash->pesos[i][(unsigned int)palavra[i]];
+        soma += hash->pesos[i] * (unsigned int)palavra[i];
     }
     
     return (soma % hash->tamanho);
 }
 
-void insereHash (tipoHash* hash, char* palavra, int idDoc){
-
-    // Calcula o índice matemático
+int insereHash (tipoHash* hash, char* palavra, int idDoc){
     int indice = calculaHash(hash, palavra);
 
-    // Verifica a lista de colisões nesse índice
     tipoNoHash* atual = hash->tabela[indice];
 
     while (atual != NULL) {
         if (strcmp(atual->palavra, palavra) == 0) {
-            insereLista (idDoc, &(atual->ocorrencias));
-            return;
+            return insereLista (idDoc, &(atual->ocorrencias));
         }
+
         atual = atual->prox;
     }
 
     // Caso a palavra seja nova
-    tipoNoHash* novoNO = (tipoNoHash*) malloc (sizeof(tipoNoHash));
-    strcpy (novoNO->palavra, palavra);
+    tipoNoHash* novoNO = (tipoNoHash*)malloc(sizeof(tipoNoHash));
+    strcpy(novoNO->palavra, palavra);
 
     // Prepara a lista encadeada dentro do novo slot da hash
-    inicializaLista (&(novoNO->ocorrencias));
-    insereLista (idDoc, &(novoNO->ocorrencias));
+    inicializaLista(&(novoNO->ocorrencias));
+    insereLista(idDoc, &(novoNO->ocorrencias));
 
 
     novoNO->prox = hash->tabela[indice]; // novoNo entra e se liga como primeiro da lista encadeada
     hash->tabela[indice] = novoNO; // Tabela reconhece o novoNo como o primeiro
+
+    return 1;
 }
 
 // Função auxiliar para o qsort comparar as strings em ordem alfabética
@@ -76,6 +71,25 @@ int comparaNos(const void* a, const void* b) {
     // O strcmp já faz a comparação alfabética perfeita para nós!
     return strcmp(noA->palavra, noB->palavra);
 }
+
+
+tipoLista* buscaHash(tipoHash* hash, char* palavra){
+    int indice = calculaHash(hash, palavra);
+
+    tipoNoHash* atual = hash->tabela[indice];
+
+    while(atual!=NULL){
+        if (strcmp(atual->palavra, palavra) == 0){
+            return &(atual->ocorrencias);
+        }
+
+        atual = atual->prox;
+    }
+
+    return NULL;
+
+}
+
 
 // Imprime o índice invertido em ordem alfabética
 void imprimeHash(tipoHash* hash) {
