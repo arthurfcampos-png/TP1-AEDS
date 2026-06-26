@@ -136,6 +136,5 @@ void imprimeHash(tipoHash* hash) {
         imprimeLista(&(vetorTemp[i]->ocorrencias));
     }
 
-    // Liberar a memória do vetor temporário
     free(vetorTemp);
 }

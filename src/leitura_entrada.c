@@ -43,8 +43,6 @@ void carregarStopWords(const char* nomeArquivo, char stopWords[][MAX_PALAVRA], i
         (*numStopWords)++;
     }
     fclose(f);
-
-    printf(" %d Stopwords carregadas com sucesso!\n", *numStopWords);
 }
 
 //abre a fabula especifica, le palavra por palavra e joga pros TADs
@@ -105,7 +103,7 @@ Documento* lerEntradaPrincipal(const char* arquivoEntradaPrincipal, const char* 
         return NULL;
     }
 
-    printf("[OK] Lendo %d fabulas...\n", n);
+    printf("Lendo %d fabulas...\n", n);
 
     //lê o nome de cada arquivo, cria o idDoc, processa e atualiza o nTermos no docs 
     for (int i = 0; i < n; i++) {
@@ -117,7 +115,6 @@ Documento* lerEntradaPrincipal(const char* arquivoEntradaPrincipal, const char* 
     *nDocs = n;
    
     fclose(f);
-    printf("[OK] Leitura das fabulas finalizada com sucesso!\n");
 
     return docs;
 }
