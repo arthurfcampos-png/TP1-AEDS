@@ -14,7 +14,7 @@ int tamanhoLista(tipoLista* lista){
     int tamanho = 0;
     tipoNo* aux = lista->primeiro->prox;
 
-    while (aux->prox != NULL){
+    while (aux != NULL){
         tamanho ++;
         aux = aux->prox;
     }
