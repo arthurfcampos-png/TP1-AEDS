@@ -3,60 +3,59 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <sys/time.h>
 
-// --- ESTRUTURAS ---\\ 
 
-// Definindo tipo apontador
-typedef struct tipoNo* tipoApontador;
-
-// Definindo a struct da celula
+//Struct da celula
 typedef struct tipoNo{
     int qtde, idDoc;
-    tipoApontador prox;
+    struct tipoNo* prox;
 } tipoNo;
 
-// Definindo a struct da lista encadeada
+//Struct da lista encadeada
 typedef struct tipoLista{
     tipoNo *primeiro, *ultimo;
 } tipoLista;
 
-// --- FUNÇÕES GERAIS --- \\ 
+
+// Funções
 
 void inicializaLista(tipoLista* lista);
 
-void insereLista(int idDoc, tipoLista* lista);
+int insereLista(int idDoc, tipoLista* lista);
 
 void imprimeLista(tipoLista* lista);
 
 
-// --- GETTERS --- \\ 
+//Get
 
 // Retorna quantidade de ocorrências de uma célula
-int getQtde(tipoApontador No);
+int getQtde(tipoNo* No);
 
 // Retorna o ID do documento de uma célula
-int getIdDoc(tipoApontador No);
+int getIdDoc(tipoNo* No);
 
 // Retorna o ponteiro para a próxima célula
-tipoApontador getProx(tipoApontador No);
+tipoNo* getProx(tipoNo* No);
 
 // Retorna o primeiro elemento da lista (Célula cabeça)
-tipoApontador getPrimeiro(tipoLista* lista);
+tipoNo* getPrimeiro(tipoLista* lista);
 
 // Retorna o último elemento da lista
-tipoApontador getUltimo(tipoLista* lista);
+tipoNo* getUltimo(tipoLista* lista);
 
 
-// --- SETTERS --- \\ 
+//Sets
 
 // Altera a quantidade de ocorrências de uma célula
-void setQtde(tipoApontador No, int qtde);
+void setQtde(tipoNo* No, int qtde);
 
 // Altera o ID do documento de uma célula
-void setIdDoc(tipoApontador No, int idDoc);
+void setIdDoc(tipoNo* No, int idDoc);
 
 // Altera o ponteiro para a próxima célula
-void setProx(tipoApontador No, tipoApontador prox);
+void setProx(tipoNo* No, tipoNo* prox);
 
 
 #endif
