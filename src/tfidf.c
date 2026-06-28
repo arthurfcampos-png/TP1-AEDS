@@ -3,10 +3,10 @@
 int comparaRelevancia(const void* a, const void* b) {
     Relevancia* r1 = (Relevancia*)a;
     Relevancia* r2 = (Relevancia*)b;
-    
+
     if (r1->score < r2->score) return 1;
     if (r1->score > r2->score) return -1;
-    
+
     return 0;
 }
 
@@ -14,11 +14,11 @@ int tamanhoLista(tipoLista* lista){
     int tamanho = 0;
     tipoNo* aux = lista->primeiro->prox;
 
-    while (aux != NULL){
-        tamanho ++;
+    while (aux != NULL){ // <-- Alteração feita aqui
+        tamanho++;
         aux = aux->prox;
     }
-    
+
     return tamanho;
 }
 
@@ -32,7 +32,7 @@ void realizarBusca(char* consulta, tipoHash* hash, tipoNoPatricia* patricia, Doc
 
         char consultaCopia[500];
         strcpy(consultaCopia, consulta);
-        
+
         char* palavra = strtok(consultaCopia, " ");
 
         while (palavra != NULL) {
@@ -50,15 +50,15 @@ void realizarBusca(char* consulta, tipoHash* hash, tipoNoPatricia* patricia, Doc
 
                 if (ocorrencias != NULL) {
                     int dj = tamanhoLista(ocorrencias);
-                    
+
                     double idf = log2((double)nDocs) / (double)dj;
 
                     tipoNo* aux = ocorrencias->primeiro->prox;
                     while (aux != NULL) {
                         int fji = aux->qtde;
-                        
+
                         double wji = (double)fji * idf;
-                        
+
                         for (int i = 0; i < nDocs; i++) {
                             if (ranking[i].idDoc == aux->idDoc) {
                                 ranking[i].score += wji;
@@ -74,7 +74,7 @@ void realizarBusca(char* consulta, tipoHash* hash, tipoNoPatricia* patricia, Doc
 
         for (int i = 0; i < nDocs; i++) {
             if (ranking[i].score > 0) {
-                int indiceDoc = ranking[i].idDoc - 1; 
+                int indiceDoc = ranking[i].idDoc - 1;
                 ranking[i].score = ranking[i].score / (double)docs[indiceDoc].nTermos;
             }
         }

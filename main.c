@@ -1,12 +1,15 @@
+#include "headers/patricia.h"
 #include "headers/tfidf.h"
 
+#include <time.h>
 
 int main(){
+
+    clock_t inicio, fim;
+    double tempoG;
+
     tipoHash hash;
     tipoNoPatricia* patricia;
-
-    inicializaHash(&hash, TAM_HASH);
-    inicializaPatricia(&patricia);
 
     int nDocs = 0;
     Documento* documentos = NULL;
@@ -36,7 +39,7 @@ int main(){
         scanf("%d", &v_prog);
 
         switch (v_prog){
-    
+
             case 1:
                 printf("Digite o nome do arquivo de entrada principal:\n");
                 scanf("%s", nome_entrada);
@@ -46,6 +49,12 @@ int main(){
                     free(documentos);
                 }
 
+                //Libere e inicializa caso queira inserir outras entradas
+                liberaHash(&hash);
+                liberaPatricia(patricia);
+                inicializaHash(&hash, TAM_HASH);
+                inicializaPatricia(&patricia);
+
                 documentos = lerEntradaPrincipal(caminho_entrada, "stopwords.txt", &hash, &patricia, &nDocs);
 
                 if (documentos != NULL){
@@ -53,7 +62,7 @@ int main(){
                 }
 
                 break;
-            
+
             case 2:
                 if (documentos == NULL) {
                     printf("Erro: Leia os arquivos de entrada (opcao 1) antes de imprimir os indices.\n");
@@ -67,49 +76,62 @@ int main(){
                 imprimePatricia(patricia);
 
                 break;
-            
+
             case 3:
                 if (documentos == NULL) {
                     printf("Erro: Leia os arquivos de entrada (opcao 1) antes de fazer buscas.\n");
                     break;
                 }
-                
+
                 printf("Digite o(s) termo(s) de busca: ");
                 while (getchar() != '\n');
                 fgets(termo_busca, sizeof(termo_busca), stdin);
                 termo_busca[strcspn(termo_busca, "\n")] = '\0';
 
+                inicio = clock();
+
                 realizarBusca(termo_busca, &hash, patricia, documentos, nDocs, stopWords, numStopWords, 1);
 
+                fim = clock();
+
+                tempoG = ((double)(fim - inicio)) / CLOCKS_PER_SEC * 1000.0;
+                printf("\nTempo de execucao para hash: %f ms\n", tempoG);
 
                 break;
-            
+
             case 4:
                 if (documentos == NULL) {
                     printf("Erro: Leia os arquivos de entrada (opcao 1) antes de fazer buscas.\n");
                     break;
                 }
-                
+
                 printf("Digite o(s) termo(s) de busca: ");
                 while (getchar() != '\n');
                 fgets(termo_busca, sizeof(termo_busca), stdin);
                 termo_busca[strcspn(termo_busca, "\n")] = '\0';
 
+                inicio = clock();
+
                 realizarBusca(termo_busca, &hash, patricia, documentos, nDocs, stopWords, numStopWords, 2);
 
+                fim = clock();
+
+                tempoG = ((double)(fim - inicio)) / CLOCKS_PER_SEC * 1000.0;
+                printf("\nTempo de execucao para patricia: %f ms\n", tempoG);
+
                 break;
-            
+
             case 5:
                 if (documentos != NULL) {
                     free(documentos);
                 }
 
-                //liberaHash(&hash);
-                //limpa patricia
+                liberaHash(&hash);
+                liberaPatricia(patricia);
 
                 v_true = 0;
                 break;
-            
+
             default:
                 printf("Opcao invalida.\n");
                 break;

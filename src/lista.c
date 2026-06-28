@@ -49,6 +49,21 @@ void imprimeLista(tipoLista* lista){
     printf("\n");
 }
 
+// Função para liberar toda a memória de uma lista encadeada (incluindo o nó cabeça)
+void liberaLista(tipoLista* lista) {
+    if (lista == NULL) return;
+
+    tipoNo* atual = lista->primeiro;
+    while (atual != NULL) {
+        tipoNo* aux = atual->prox;
+        free(atual); // Libera o nó atual (inclusive o nó cabeça na primeira iteração)
+        atual = aux;
+    }
+
+    lista->primeiro = NULL;
+    lista->ultimo = NULL;
+}
+
 
 //Gets
 

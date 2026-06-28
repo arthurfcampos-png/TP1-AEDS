@@ -5,12 +5,12 @@
 #include <sys/stat.h>
 
 typedef struct tipoNoPatricia {
-    int  pos;               
-    char ch;                
-    struct tipoNoPatricia* esq;   
-    struct tipoNoPatricia* dir;   
-    char* palavra;          
-    tipoLista ocorrencias;             
+    int  pos;
+    char ch;
+    struct tipoNoPatricia* esq;
+    struct tipoNoPatricia* dir;
+    char* palavra;
+    tipoLista ocorrencias;
 } tipoNoPatricia;
 
 //variaveis para analise de desempenho

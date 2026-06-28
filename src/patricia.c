@@ -27,13 +27,13 @@ int primeira_diferenca(const char* a, const char* b) {
 tipoNoPatricia* novo_no_folha(const char* palavra, int idDoc) {
     tipoNoPatricia* n = (tipoNoPatricia*) malloc(sizeof(tipoNoPatricia));
     if (!n) return NULL;
-    
+
     n->pos = -1;
     n->ch = '\0';
     n->esq = NULL;
     n->dir = NULL;
     n->palavra = strdup(palavra);
-    
+
     inicializaLista(&(n->ocorrencias));
     insereLista(idDoc, &(n->ocorrencias));
 
@@ -45,14 +45,14 @@ tipoNoPatricia* novo_no_folha(const char* palavra, int idDoc) {
 tipoNoPatricia* novo_no_interno(int pos, char ch) {
     tipoNoPatricia* n = (tipoNoPatricia*) malloc(sizeof(tipoNoPatricia));
     if (!n) return NULL;
-    
+
     n->pos = pos;
     n->ch = ch;
     n->esq = NULL;
     n->dir = NULL;
     n->palavra = NULL;
     //listanao e inicializada em nos internos
-    
+
     patricia_memoria_bytes += sizeof(tipoNoPatricia);
     return n;
 }
@@ -78,7 +78,7 @@ tipoLista* buscaPatricia(tipoNoPatricia* raiz, char* palavra) {
         else
             atual = atual->dir;
     }
-    
+
     if (atual->palavra) {
         if (strcmp(atual->palavra, palavra) == 0) {
             patricia_comparacoes_busca++;
@@ -175,14 +175,14 @@ void imprimePatricia(tipoNoPatricia* raiz) {
 
 void liberaPatricia(tipoNoPatricia* raiz) {
     if (!raiz) return;
-    
+
     liberaPatricia(raiz->esq);
     liberaPatricia(raiz->dir);
-    
+
     if (raiz->palavra) {
         free(raiz->palavra);
-       
-        // liberaLista(&(raiz->ocorrencias));
+
+        liberaLista(&(raiz->ocorrencias));
     }
     free(raiz);
 }

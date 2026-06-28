@@ -3,19 +3,19 @@
 
 void inicializaHash(tipoHash* hash, int tamanho) {
     hash->tamanho = tamanho;
-    
+
     hash->tabela = (tipoNoHash**) malloc(tamanho * sizeof(tipoNoHash*));
     if (hash->tabela == NULL) {
         printf("Erro: Falha ao alocar memoria para a Tabela Hash.\n");
         exit(1);
     }
-    
+
     for (int i = 0; i < tamanho; i++) {
         hash->tabela[i] = NULL;
     }
 
     struct timeval semente;
-    gettimeofday(&semente, NULL); 
+    gettimeofday(&semente, NULL);
     srand((int)(semente.tv_sec + 1000000 * semente.tv_usec));
 
     //preenche o vetor de pesos
@@ -25,13 +25,13 @@ void inicializaHash(tipoHash* hash, int tamanho) {
 }
 
 int calculaHash(tipoHash* hash, char* palavra) {
-    unsigned int soma = 0; 
+    unsigned int soma = 0;
     int comp = strlen(palavra);
-    
+
     for (int i = 0; i < comp; i++) {
         soma += hash->pesos[i] * (unsigned int)palavra[i];
     }
-    
+
     return (soma % hash->tamanho);
 }
 
@@ -73,7 +73,6 @@ int comparaNos(const void* a, const void* b) {
     return strcmp(noA->palavra, noB->palavra);
 }
 
-
 tipoLista* buscaHash(tipoHash* hash, char* palavra){
     int indice = calculaHash(hash, palavra);
 
@@ -90,7 +89,6 @@ tipoLista* buscaHash(tipoHash* hash, char* palavra){
     return NULL;
 
 }
-
 
 // Imprime o índice invertido em ordem alfabética
 void imprimeHash(tipoHash* hash) {
@@ -137,4 +135,27 @@ void imprimeHash(tipoHash* hash) {
     }
 
     free(vetorTemp);
+}
+
+// Função para liberar toda a memória alocada para a Tabela Hash
+void liberaHash(tipoHash* hash) {
+    if (hash == NULL || hash->tabela == NULL) return;
+
+    // Percorre todas as posições do vetor da tabela
+    for (int i = 0; i < hash->tamanho; i++) {
+        tipoNoHash* atual = hash->tabela[i];
+
+        while (atual != NULL) {
+            tipoNoHash* aux = atual->prox;
+
+            liberaLista(&(atual->ocorrencias));
+
+            free(atual);
+
+            atual = aux;
+        }
+    }
+
+    free(hash->tabela);
+    hash->tabela = NULL;
 }

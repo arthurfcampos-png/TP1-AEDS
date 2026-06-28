@@ -27,6 +27,8 @@ int insereLista(int idDoc, tipoLista* lista);
 
 void imprimeLista(tipoLista* lista);
 
+void liberaLista(tipoLista* lista);
+
 
 //Get
 
