@@ -1,6 +1,8 @@
 #include "../headers/hash.h"
 
 
+size_t hash_memoria_bytes = 0;
+
 void inicializaHash(tipoHash* hash, int tamanho) {
     hash->tamanho = tamanho;
 
@@ -9,6 +11,8 @@ void inicializaHash(tipoHash* hash, int tamanho) {
         printf("Erro: Falha ao alocar memoria para a Tabela Hash.\n");
         exit(1);
     }
+
+    hash_memoria_bytes += tamanho * sizeof(tipoNoHash*);
 
     for (int i = 0; i < tamanho; i++) {
         hash->tabela[i] = NULL;
@@ -50,6 +54,7 @@ int insereHash (tipoHash* hash, char* palavra, int idDoc){
 
     // Caso a palavra seja nova
     tipoNoHash* novoNO = (tipoNoHash*)malloc(sizeof(tipoNoHash));
+    hash_memoria_bytes += sizeof(tipoNoHash);
     strcpy(novoNO->palavra, palavra);
 
     // Prepara a lista encadeada dentro do novo slot da hash

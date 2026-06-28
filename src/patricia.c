@@ -2,10 +2,7 @@
 
 
 //variaveis para analise de desempenho
-long long patricia_comparacoes_insercao = 0;
-long long patricia_comparacoes_busca = 0;
 size_t patricia_memoria_bytes = 0;
-
 
 //retorna o caractere da palavra em uma posicao especifica
 char char_em(const char* str, int pos) {
@@ -51,17 +48,11 @@ tipoNoPatricia* novo_no_interno(int pos, char ch) {
     n->esq = NULL;
     n->dir = NULL;
     n->palavra = NULL;
-    //listanao e inicializada em nos internos
 
     patricia_memoria_bytes += sizeof(tipoNoPatricia);
     return n;
 }
 
-
-//inicializa a arvore
-void inicializaPatricia(tipoNoPatricia** raiz) {
-    *raiz = NULL;
-}
 
 //busca na arvore
 tipoLista* buscaPatricia(tipoNoPatricia* raiz, char* palavra) {
@@ -72,7 +63,6 @@ tipoLista* buscaPatricia(tipoNoPatricia* raiz, char* palavra) {
 
     //percorre a arvore usando o bit de discriminacao
     while (atual->pos >= 0) {
-        patricia_comparacoes_busca++;
         if (char_em(palavra, atual->pos) < atual->ch)
             atual = atual->esq;
         else
@@ -81,7 +71,6 @@ tipoLista* buscaPatricia(tipoNoPatricia* raiz, char* palavra) {
 
     if (atual->palavra) {
         if (strcmp(atual->palavra, palavra) == 0) {
-            patricia_comparacoes_busca++;
             return &(atual->ocorrencias);
         }
     }
@@ -100,7 +89,6 @@ int inserePatricia(tipoNoPatricia** raiz_ptr, char* palavra, int idDoc) {
     //busca o local onde a palavra deveria estar
     tipoNoPatricia* folha_atual = raiz;
     while (folha_atual->pos >= 0) {
-        patricia_comparacoes_insercao++;
         if (char_em(palavra, folha_atual->pos) < folha_atual->ch)
             folha_atual = folha_atual->esq;
         else
@@ -134,7 +122,6 @@ int inserePatricia(tipoNoPatricia** raiz_ptr, char* palavra, int idDoc) {
 
     //encontra o ponto de inserção do novo no interno na hierarquia
     while (cur->pos >= 0 && cur->pos <= dif) {
-        patricia_comparacoes_insercao++;
         if (char_em(palavra, cur->pos) < cur->ch) {
             link = &(cur->esq);
             cur = cur->esq;

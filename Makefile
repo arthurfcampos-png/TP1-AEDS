@@ -1,4 +1,3 @@
-
 CC      = gcc
 CFLAGS  = -I./headers -g -Wall
 LDFLAGS = -lm

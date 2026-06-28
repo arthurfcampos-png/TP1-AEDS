@@ -1,7 +1,4 @@
-#include "headers/patricia.h"
 #include "headers/tfidf.h"
-
-#include <time.h>
 
 int main(){
 
@@ -9,7 +6,8 @@ int main(){
     double tempoG;
 
     tipoHash hash;
-    tipoNoPatricia* patricia;
+    hash.tabela = NULL;
+    tipoNoPatricia* patricia = NULL;
 
     int nDocs = 0;
     Documento* documentos = NULL;
@@ -30,10 +28,11 @@ int main(){
         printf("Digite o numero correspondente a acao que deseja executar:\n");
         printf("=============================================================\n");
         printf("1. Inserir dados nos indices invertidos\n");
-        printf("2. Imprimir indices invertidos\n");
-        printf("3. Buscar termos na Hash\n");
-        printf("4. Buscar termos na PATRICIA\n");
-        printf("5. Encerrar o programa\n");
+        printf("2. Imprimir Hash\n");
+        printf("3. Imprimir PATRICIA\n");
+        printf("4. Buscar termos na Hash\n");
+        printf("5. Buscar termos na PATRICIA\n");
+        printf("6. Encerrar o programa\n");
 
         int v_prog;
         scanf("%d", &v_prog);
@@ -49,11 +48,17 @@ int main(){
                     free(documentos);
                 }
 
-                //Libere e inicializa caso queira inserir outras entradas
-                liberaHash(&hash);
-                liberaPatricia(patricia);
+                if(hash.tabela != NULL){
+                    liberaHash(&hash);
+                    hash.tabela = NULL;
+                }
+
+                if(patricia != NULL){
+                    liberaPatricia(patricia);
+                    patricia = NULL;
+                }
+
                 inicializaHash(&hash, TAM_HASH);
-                inicializaPatricia(&patricia);
 
                 documentos = lerEntradaPrincipal(caminho_entrada, "stopwords.txt", &hash, &patricia, &nDocs);
 
@@ -71,13 +76,23 @@ int main(){
 
                 printf("\nImprimindo a estrutura Hash:\n");
                 imprimeHash(&hash);
-
-                printf("\nImprimindo a estrutura Arvore PATRICIA:\n");
-                imprimePatricia(patricia);
+                printf("Memoria consumida pela Hash: %lu bytes\n", (unsigned long)hash_memoria_bytes);
 
                 break;
 
             case 3:
+                if (documentos == NULL) {
+                    printf("Erro: Leia os arquivos de entrada (opcao 1) antes de imprimir os indices.\n");
+                    break;
+                }
+
+                printf("\nImprimindo a estrutura Arvore PATRICIA:\n");
+                imprimePatricia(patricia);
+                printf("Memoria consumida pela PATRICIA: %lu bytes\n", (unsigned long)patricia_memoria_bytes);
+
+                break;
+                
+            case 4:
                 if (documentos == NULL) {
                     printf("Erro: Leia os arquivos de entrada (opcao 1) antes de fazer buscas.\n");
                     break;
@@ -95,11 +110,11 @@ int main(){
                 fim = clock();
 
                 tempoG = ((double)(fim - inicio)) / CLOCKS_PER_SEC * 1000.0;
-                printf("\nTempo de execucao para hash: %f ms\n", tempoG);
+                printf("\nTempo de execucao da busca para hash: %f ms\n", tempoG);
 
                 break;
 
-            case 4:
+            case 5:
                 if (documentos == NULL) {
                     printf("Erro: Leia os arquivos de entrada (opcao 1) antes de fazer buscas.\n");
                     break;
@@ -117,17 +132,22 @@ int main(){
                 fim = clock();
 
                 tempoG = ((double)(fim - inicio)) / CLOCKS_PER_SEC * 1000.0;
-                printf("\nTempo de execucao para patricia: %f ms\n", tempoG);
+                printf("\nTempo de execucao da busca para patricia: %f ms\n", tempoG);
 
                 break;
 
-            case 5:
+            case 6:
                 if (documentos != NULL) {
                     free(documentos);
                 }
 
-                liberaHash(&hash);
-                liberaPatricia(patricia);
+                if(hash.tabela != NULL){
+                    liberaHash(&hash);
+                }
+
+                if(patricia != NULL){
+                    liberaPatricia(patricia);
+                }
 
                 v_true = 0;
                 break;

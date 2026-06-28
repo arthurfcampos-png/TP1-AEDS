@@ -20,6 +20,8 @@ typedef struct tipoHash {
     unsigned int pesos[MAX_PALAVRA];
 } tipoHash;
 
+//variaveis para analise de memoria da hash
+extern size_t hash_memoria_bytes;
 
 // Inicializa a tabela Hash
 void inicializaHash (tipoHash* hash, int tamanhoTabela);

@@ -4,6 +4,7 @@
 #include "../headers/hash.h"
 #include "../headers/patricia.h"
 #include <ctype.h>
+#include <time.h>
 
 
 // Struct pra guardar o nome do arquivo e o ID dele em memoria
@@ -19,7 +20,7 @@ int ehStopWord(char* palavra, char stopWords[][MAX_PALAVRA], int numStopWords);
 
 void carregarStopWords(const char* nomeArquivo, char stopWords[][MAX_PALAVRA], int* numStopWords);
 
-int processarFabula(const char* nomeFabula, int idDoc, char stopWords[][MAX_PALAVRA], int numStopWords, tipoHash* hash, tipoNoPatricia** patricia);
+int processarFabula(const char* nomeFabula, int idDoc, char stopWords[][MAX_PALAVRA], int numStopWords, tipoHash* hash, tipoNoPatricia** patricia, double* tempo_total_hash, double* tempo_total_patricia);
 
 Documento* lerEntradaPrincipal(const char* arquivoEntradaPrincipal, const char* arquivoStopWords, tipoHash* hash, tipoNoPatricia** patricia, int* nDocs);
 

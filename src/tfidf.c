@@ -51,7 +51,7 @@ void realizarBusca(char* consulta, tipoHash* hash, tipoNoPatricia* patricia, Doc
                 if (ocorrencias != NULL) {
                     int dj = tamanhoLista(ocorrencias);
 
-                    double idf = log2((double)nDocs) / (double)dj;
+                    double idf = log2((double)nDocs / (double)dj);
 
                     tipoNo* aux = ocorrencias->primeiro->prox;
                     while (aux != NULL) {
