@@ -5,7 +5,7 @@
 
 #define MAX_PALAVRA 80
 #define TAM_ALFABETO 256
-#define TAM_HASH 2003
+#define TAM_HASH 997
 
 
 typedef struct tipoNoHash {
