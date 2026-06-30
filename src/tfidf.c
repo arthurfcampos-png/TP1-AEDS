@@ -1,5 +1,11 @@
+/*******************************************************************************
+ * Arquivo: tfidf.c
+ * Autores: Robson Gaspar da Fonseca Junior [6573], Arthur Felipe Campos [6559], Álvaro de Oliveira Neto [6567], Tadeu Miller [6601]
+ *******************************************************************************/
+
 #include "../headers/tfidf.h"
 
+//funcao para definir o criterio de ordenacao. é usada pelo quicksort nativo
 int comparaRelevancia(const void* a, const void* b) {
     Relevancia* r1 = (Relevancia*)a;
     Relevancia* r2 = (Relevancia*)b;
@@ -10,11 +16,12 @@ int comparaRelevancia(const void* a, const void* b) {
     return 0;
 }
 
+//funcao que calcula o tamanho da lista encadeada
 int tamanhoLista(tipoLista* lista){
     int tamanho = 0;
     tipoNo* aux = lista->primeiro->prox;
 
-    while (aux != NULL){ // <-- Alteração feita aqui
+    while (aux != NULL){
         tamanho++;
         aux = aux->prox;
     }
@@ -22,7 +29,7 @@ int tamanhoLista(tipoLista* lista){
     return tamanho;
 }
 
-
+//funcao principal de busca de documentos
 void realizarBusca(char* consulta, tipoHash* hash, tipoNoPatricia* patricia, Documento* docs, int nDocs, char stopWords[][MAX_PALAVRA], int numStopWords, int tipoIndice){
     Relevancia* ranking = (Relevancia*) malloc(nDocs * sizeof(Relevancia));
         for (int i = 0; i < nDocs; i++) {
@@ -37,7 +44,8 @@ void realizarBusca(char* consulta, tipoHash* hash, tipoNoPatricia* patricia, Doc
 
         while (palavra != NULL) {
             limparPalavra(palavra);
-
+            
+            //palavra limpa, que nao e stopword
             if (strlen(palavra) > 0 && !ehStopWord(palavra, stopWords, numStopWords)) {
                 tipoLista* ocorrencias = NULL;
 
@@ -47,7 +55,8 @@ void realizarBusca(char* consulta, tipoHash* hash, tipoNoPatricia* patricia, Doc
                 } else if (tipoIndice == 2) {
                     ocorrencias = buscaPatricia(patricia, palavra);
                 }
-
+                
+                //calcula o tfidf propriamente dito
                 if (ocorrencias != NULL) {
                     int dj = tamanhoLista(ocorrencias);
 
@@ -78,7 +87,8 @@ void realizarBusca(char* consulta, tipoHash* hash, tipoNoPatricia* patricia, Doc
                 ranking[i].score = ranking[i].score / (double)docs[indiceDoc].nTermos;
             }
         }
-
+        
+        //ordena os resultados do ranking de forma decrescente
         qsort(ranking, nDocs, sizeof(Relevancia), comparaRelevancia);
 
         printf("\nRESULTADO DA BUSCA\n");

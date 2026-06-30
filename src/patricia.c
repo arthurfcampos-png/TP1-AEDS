@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Arquivo: patricia.c
+ * Autores: Robson Gaspar da Fonseca Junior [6573], Arthur Felipe Campos [6559], Álvaro de Oliveira Neto [6567], Tadeu Miller [6601]
+ *******************************************************************************/
+
 #include "../headers/patricia.h"
 
 
@@ -77,6 +82,7 @@ tipoLista* buscaPatricia(tipoNoPatricia* raiz, char* palavra) {
     return NULL;
 }
 
+//funcao para inserir na patricia
 int inserePatricia(tipoNoPatricia** raiz_ptr, char* palavra, int idDoc) {
     tipoNoPatricia* raiz = *raiz_ptr;
 
@@ -145,6 +151,7 @@ int inserePatricia(tipoNoPatricia** raiz_ptr, char* palavra, int idDoc) {
     return 1;
 }
 
+//funcao para imprimir a patricia
 void imprimePatricia(tipoNoPatricia* raiz) {
     if (!raiz) return;
 
@@ -160,6 +167,7 @@ void imprimePatricia(tipoNoPatricia* raiz) {
     imprimePatricia(raiz->dir);
 }
 
+//funcao para liberar a memoria usada pela patricia
 void liberaPatricia(tipoNoPatricia* raiz) {
     if (!raiz) return;
 
@@ -168,7 +176,8 @@ void liberaPatricia(tipoNoPatricia* raiz) {
 
     if (raiz->palavra) {
         free(raiz->palavra);
-
+        
+        //libera a lista de ocorrencias
         liberaLista(&(raiz->ocorrencias));
     }
     free(raiz);

@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Arquivo: leitura_entrada.c
+ * Autores: Robson Gaspar da Fonseca Junior [6573], Arthur Felipe Campos [6559], Álvaro de Oliveira Neto [6567], Tadeu Miller [6601]
+ *******************************************************************************/
+
 #include "../headers/leitura_entrada.h"
 
 
@@ -66,7 +71,8 @@ int processarFabula(const char* nomeFabula, int idDoc, char stopWords[][MAX_PALA
         limparPalavra(palavra);
 
         if (strlen(palavra) > 0 && !ehStopWord(palavra, stopWords, numStopWords)){
-
+            
+            //somamos e agrupamos os tempos de insercao e retornamos com ponteiros pra lerEntradaPrincipal usar
             i_hash = clock();
             nTermos += insereHash(hash, palavra, idDoc);
             f_hash = clock();
@@ -76,8 +82,8 @@ int processarFabula(const char* nomeFabula, int idDoc, char stopWords[][MAX_PALA
             i_patricia = clock();
             inserePatricia(patricia, palavra, idDoc);
             f_patricia = clock();
-
-        *tempo_total_patricia += ((double)(f_patricia - i_patricia) / CLOCKS_PER_SEC) * 1000.0;
+        
+            *tempo_total_patricia += ((double)(f_patricia - i_patricia) / CLOCKS_PER_SEC) * 1000.0;
         }
     }
 

@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Arquivo: hash.c
+ * Autores: Robson Gaspar da Fonseca Junior [6573], Arthur Felipe Campos [6559], Álvaro de Oliveira Neto [6567], Tadeu Miller [6601]
+ *******************************************************************************/
+
 #include "../headers/hash.h"
 
 
